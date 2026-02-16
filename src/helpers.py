@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from patient import PatientAggregateDict, PatientByDrugDict, PatientDictsUtility
+from patient import PatientAggregate, Patient, PatientUtility
 
 
 # Program variables
@@ -95,13 +95,13 @@ def validate_input_file(file_path):
 
 def add_patient_to_patient_drug_dict(patient_drug_key, patient_name, drug):
     if patient_drug_key not in patient_drug_dict:
-        patient = PatientByDrugDict(patient_name, drug)
+        patient = Patient(patient_name, drug)
         patient_drug_dict[patient_drug_key] = patient
 
 
 def add_patient_to_patient_aggregated_dict(patient_aggregate_key, patient_name, drug):
     if patient_aggregate_key not in patient_aggregated_dict:
-        patient = PatientAggregateDict(patient_name)
+        patient = PatientAggregate(patient_name)
         patient.add_prescription(drug)
         patient_aggregated_dict[patient_aggregate_key] = patient
     else:
@@ -160,14 +160,13 @@ def print_patient_drug_report(ran_from_menu, sort_by=None):
     if ran_from_menu:
         print("\nRX Report (by patient-drug)\n--------------------------")
     # sort the dictionary
-    util = PatientDictsUtility
+    util = PatientUtility
     if sort_by == 'alphabetical':
         processed_patient_drug_dict = util.sort_patient_drug_alphabitical(patient_drug_dict)
     elif sort_by == 'decreasing_income':
         processed_patient_drug_dict = util.sort_patient_drug_by_income_decreasing(patient_drug_dict)
     else:
         processed_patient_drug_dict = patient_drug_dict
-    print(processed_patient_drug_dict)
     for key, patient in processed_patient_drug_dict.items():
         print(patient)
     print()
@@ -178,14 +177,13 @@ def print_patient_aggregate_report(ran_from_menu, sort_by=None):
     if ran_from_menu:
         print("\nRX Report (aggregated)\n--------------------------")
     # sort the dictionary
-    util = PatientDictsUtility
+    util = PatientUtility
     if sort_by == 'alphabetical':
         processed_patient_aggregated_dict = util.sort_aggregate_patient_alphabitically(patient_aggregated_dict)
     elif sort_by == 'decreasing_income':
         processed_patient_aggregated_dict = util.sort_aggregate_patient_by_income_decreasing(patient_aggregated_dict)
     else:    
         processed_patient_aggregated_dict = patient_aggregated_dict
-    print(processed_patient_aggregated_dict)
     for key, patient in processed_patient_aggregated_dict.items():
         print(patient)
     print()

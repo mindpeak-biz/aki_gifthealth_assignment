@@ -1,6 +1,6 @@
 # Program classes
 
-class PatientByDrugDict:
+class Patient:
     """Object to track a patient's granular (by drug) fills and revenue generated for the pharmacy"""
     def __init__(self, name, drug=None):
         self.name = name.capitalize()
@@ -27,7 +27,7 @@ class PatientByDrugDict:
         return f"{self.name} (Drug: {self.drug}): {self.fills} fills {sign}${abs(self.income_to_pharmacy)} income"
 
 
-class PatientAggregateDict:
+class PatientAggregate:
     """Object to track a patient's aggregate fills and revenue generated for the pharmacy"""
     def __init__(self, name):
         self.name = name.capitalize()
@@ -57,7 +57,7 @@ class PatientAggregateDict:
         return f"{self.name}: {self.total_fills} fills {sign}${abs(self.total_income_to_pharmacy)} income"
     
 
-class PatientDictsUtility:
+class PatientUtility:
     @classmethod
     def sort_patient_drug_alphabitical(cls, patient_dict):
         return {k: patient_dict[k] for k in sorted(patient_dict)}
