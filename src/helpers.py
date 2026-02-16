@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from patient import PatientAggregate, Patient, PatientUtility
+from patient import PatientAggregate, Patient, PatientUtility, SortBy, PrescriptionEvent
 
 
 # Program variables
@@ -9,7 +9,7 @@ patient_aggregated_dict = {} # this is the dictionary for the requested output
 income_per_prescription_filled = 5
 loss_per_return = 1
 total_loss_per_return = income_per_prescription_filled + loss_per_return
-sort_by = 'decreasing_income' # Possible values: 'default' | 'alphabetical' | 'decreasing_income'
+sort_by = SortBy.NONE
 
 
 def execute_normal_flow(file_path, ran_from_menu, report_type):
@@ -78,7 +78,7 @@ def check_file_exists(file_name, ran_from_menu):
 def validate_input_file(file_path):
     try:
         line_count = 1
-        valid_prescription_events = ["created","filled","returned"]
+        valid_prescription_events = list({event.value for event in PrescriptionEvent})
         with open(file_path, 'r', encoding='utf-8') as file_stream:
             for line in file_stream:
                 word_array = line.strip().split(' ')
@@ -122,12 +122,12 @@ def process_validated_file(file_path):
             prescription_event = word_array[2]
             patient_drug_key = f"{patient_name}_{drug_name}"
             patient_aggregate_key = f"{patient_name}"
-            if prescription_event == 'created':
+            if prescription_event == PrescriptionEvent.CREATED.value:
                 # patient_drug_dict
                 add_patient_to_patient_drug_dict(patient_drug_key, patient_name, drug_name)
                 # patient_aggregated_dict
                 add_patient_to_patient_aggregated_dict(patient_aggregate_key, patient_name, drug_name)
-            elif prescription_event == 'filled':
+            elif prescription_event == PrescriptionEvent.FILLED.value:
                 # modify patient record in patient_drug_dict
                 if patient_drug_key in patient_drug_dict:
                     patient_drug_dict[patient_drug_key].increment_income_to_pharmacy(income_per_prescription_filled)
@@ -136,7 +136,7 @@ def process_validated_file(file_path):
                 if patient_aggregate_key in patient_aggregated_dict and drug_name in patient_aggregated_dict[patient_aggregate_key].created_prescriptions:
                     patient_aggregated_dict[patient_aggregate_key].increment_total_income_to_pharmacy(income_per_prescription_filled)
                     patient_aggregated_dict[patient_aggregate_key].increment_total_fills()
-            elif prescription_event == 'returned':
+            elif prescription_event == PrescriptionEvent.RETURNED.value:
                 # modify patient record in patient_drug_dict
                 if patient_drug_key in patient_drug_dict:
                     patient_drug_dict[patient_drug_key].decrement_income_to_pharmacy(total_loss_per_return)
@@ -155,16 +155,18 @@ def sort_patient_dicts():
     pass
 
 
-def print_patient_drug_report(ran_from_menu, sort_by=None):
+def print_patient_drug_report(ran_from_menu, sort_by):
     # Print report header if this function was called from the get_menu_option function
     if ran_from_menu:
         print("\nRX Report (by patient-drug)\n--------------------------")
     # sort the dictionary
     util = PatientUtility
-    if sort_by == 'alphabetical':
+    if sort_by == SortBy.ALPHABETICAL:
         processed_patient_drug_dict = util.sort_patient_drug_alphabitical(patient_drug_dict)
-    elif sort_by == 'decreasing_income':
-        processed_patient_drug_dict = util.sort_patient_drug_by_income_decreasing(patient_drug_dict)
+    elif sort_by == SortBy.DECREASING_INCOME:
+        processed_patient_drug_dict = util.sort_patient_drug_by_decreasing_income(patient_drug_dict)
+    elif sort_by == SortBy.DECREASING_FILLS:
+        processed_patient_drug_dict = util.sort_patient_drug_by_decreasing_fills(patient_drug_dict)
     else:
         processed_patient_drug_dict = patient_drug_dict
     for key, patient in processed_patient_drug_dict.items():
@@ -172,16 +174,18 @@ def print_patient_drug_report(ran_from_menu, sort_by=None):
     print()
 
 
-def print_patient_aggregate_report(ran_from_menu, sort_by=None):
+def print_patient_aggregate_report(ran_from_menu, sort_by):
     # Print report header if this function was called from the get_menu_option function
     if ran_from_menu:
         print("\nRX Report (aggregated)\n--------------------------")
     # sort the dictionary
     util = PatientUtility
-    if sort_by == 'alphabetical':
+    if sort_by == SortBy.ALPHABETICAL:
         processed_patient_aggregated_dict = util.sort_aggregate_patient_alphabitically(patient_aggregated_dict)
-    elif sort_by == 'decreasing_income':
-        processed_patient_aggregated_dict = util.sort_aggregate_patient_by_income_decreasing(patient_aggregated_dict)
+    elif sort_by == SortBy.DECREASING_INCOME:
+        processed_patient_aggregated_dict = util.sort_aggregate_patient_by_decreasing_income(patient_aggregated_dict)
+    elif sort_by == SortBy.DECREASING_FILLS:
+        processed_patient_aggregated_dict = util.sort_aggregate_patient_by_decreasing_fills(patient_aggregated_dict)
     else:    
         processed_patient_aggregated_dict = patient_aggregated_dict
     for key, patient in processed_patient_aggregated_dict.items():

@@ -1,5 +1,7 @@
 # Program classes
 
+from enum import Enum
+
 class Patient:
     """Object to track a patient's granular (by drug) fills and revenue generated for the pharmacy"""
     def __init__(self, name, drug=None):
@@ -55,7 +57,20 @@ class PatientAggregate:
         if self.total_income_to_pharmacy < 0:
             sign = '-'
         return f"{self.name}: {self.total_fills} fills {sign}${abs(self.total_income_to_pharmacy)} income"
-    
+
+
+class PrescriptionEvent(Enum):
+    CREATED = "created"
+    FILLED = "filled"
+    RETURNED = "returned" 
+
+
+class SortBy(Enum):
+    NONE = "keep order as ingested"
+    ALPHABETICAL = "alphabetical"
+    DECREASING_INCOME = "decreasing income" 
+    DECREASING_FILLS = "decreasing fills"
+
 
 class PatientUtility:
     @classmethod
@@ -63,13 +78,21 @@ class PatientUtility:
         return {k: patient_dict[k] for k in sorted(patient_dict)}
     
     @classmethod
-    def sort_patient_drug_by_income_decreasing(cls, patient_dict):
+    def sort_patient_drug_by_decreasing_income(cls, patient_dict):
         return dict(sorted(patient_dict.items(), key=lambda item: item[1].income_to_pharmacy, reverse=True))
+    
+    @classmethod
+    def sort_patient_drug_by_decreasing_income(cls, patient_dict):
+        return dict(sorted(patient_dict.items(), key=lambda item: item[1].fills, reverse=True))
     
     @classmethod
     def sort_aggregate_patient_alphabitically(cls, patient_dict):
         return {k: patient_dict[k] for k in sorted(patient_dict)}
     
     @classmethod
-    def sort_aggregate_patient_by_income_decreasing(cls, patient_dict):
+    def sort_aggregate_patient_by_decreasing_income(cls, patient_dict):
         return dict(sorted(patient_dict.items(), key=lambda item: item[1].total_income_to_pharmacy, reverse=True))
+    
+    @classmethod
+    def sort_aggregate_patient_by_decreasing_fills(cls, patient_dict):
+        return dict(sorted(patient_dict.items(), key=lambda item: item[1].total_fills, reverse=True))
