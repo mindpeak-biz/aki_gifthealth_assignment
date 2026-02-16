@@ -14,22 +14,25 @@ and outputs a report for the total number of fills and total income for each pat
 
 import sys
 from helpers import get_menu_option, execute_normal_flow
+from pathlib import Path
 
 
 # =======================================================================================
 def main():
-    # Get the parameter list, and parameter count
+    # Get the parameter list, parameter count, and the script directory
     parameters = sys.argv[1:]
     parameter_count = len(parameters)
+    script_dir = Path(__file__).resolve().parent
+
     # If there are no command line parameters, show the program menu
     if parameter_count == 0:
-        get_menu_option()
-    # If there is only 1 parameter, it is expected to be the data filename
+        get_menu_option(script_dir)
+    # If there is only 1 parameter, it is expected to be the data filename.So run the expected default aggregate report.
     elif parameter_count == 1:
         report_type = "aggregate"
-        file_path = f"data/{parameters[0]}" 
-        execute_normal_flow(file_path, False, report_type)
-    # If there are more than a single parameter, terminate the program  
+        file_name = parameters[0]
+        execute_normal_flow(file_name, False, report_type)
+    # If there are more than a single command line parameter, terminate the program  
     else:
         print(f"Error: Invalid number of command line parameters.")
         print(f"Maximum of 1 expected, but {parameter_count} were supplied. \nTerminating program.")

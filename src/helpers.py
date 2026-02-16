@@ -1,15 +1,15 @@
 import sys
 from pathlib import Path
-from patient import PatientAggregate, PatientByDrug
+from patient import PatientAggregateDict, PatientByDrugDict, PatientDictsUtility
 
 
 # Program variables
-file_path = None
-patient_drug_dict = {}
-patient_aggregated_dict = {}
+patient_drug_dict = {} # this is the dictionary for the bonus output (granular instead of default aggregated report data)
+patient_aggregated_dict = {} # this is the dictionary for the requested output
 income_per_prescription_filled = 5
 loss_per_return = 1
 total_loss_per_return = income_per_prescription_filled + loss_per_return
+sort_by = 'decreasing_income' # Possible values: 'default' | 'alphabetical' | 'decreasing_income'
 
 
 def execute_normal_flow(file_path, ran_from_menu, report_type):
@@ -20,12 +20,12 @@ def execute_normal_flow(file_path, ran_from_menu, report_type):
         validate_input_file(file_path)
         process_validated_file(file_path)
         if report_type == "aggregate":
-            print_patient_aggregate_report(ran_from_menu)
+            print_patient_aggregate_report(ran_from_menu, sort_by)
         else:
-            print_patient_drug_report(ran_from_menu)
+            print_patient_drug_report(ran_from_menu, sort_by)
 
 
-def get_menu_option():
+def get_menu_option(script_dir):
     selection = ''
     print("\nWelcome to RX Report")
     while selection not in ['4','q']:  
@@ -43,23 +43,25 @@ def get_menu_option():
             sys.exit()
         elif selection == '1':
             report_type = "aggregate"
-            file_path = 'sample_data.txt'
+            file_path = f"{script_dir}/sample_data.txt"
             execute_normal_flow(file_path, True, report_type)
         elif selection == '2':
             report_type = "aggregate"
             file_name = input("\nEnter data filename: ").strip().lower()
-            file_path = f"{file_name}"
+            file_path = f"{script_dir}/{file_name}"
             execute_normal_flow(file_path, True, report_type)
         elif selection == '3':
             report_type = "grouped_by_drug"
             file_name = input("\nEnter data filename: ").strip().lower()
-            file_path = f"{file_name}"
+            file_path = f"{script_dir}/{file_name}"
             execute_normal_flow(file_path, True, report_type)
         else:
             print(f"\nInvalid selection. Please try again.")
 
 
-def check_file_exists(file_path, ran_from_menu):
+def check_file_exists(file_name, ran_from_menu):
+    script_root = Path(__file__).resolve().parent
+    file_path = script_root / file_name
     path = Path(file_path)
     if not path.exists() or not path.is_file():
         error_message = f"Error: The file {file_path} was not found."
@@ -93,13 +95,13 @@ def validate_input_file(file_path):
 
 def add_patient_to_patient_drug_dict(patient_drug_key, patient_name, drug):
     if patient_drug_key not in patient_drug_dict:
-        patient = PatientByDrug(patient_name, drug)
+        patient = PatientByDrugDict(patient_name, drug)
         patient_drug_dict[patient_drug_key] = patient
 
 
 def add_patient_to_patient_aggregated_dict(patient_aggregate_key, patient_name, drug):
     if patient_aggregate_key not in patient_aggregated_dict:
-        patient = PatientAggregate(patient_name)
+        patient = PatientAggregateDict(patient_name)
         patient.add_prescription(drug)
         patient_aggregated_dict[patient_aggregate_key] = patient
     else:
@@ -145,24 +147,46 @@ def process_validated_file(file_path):
                     patient_aggregated_dict[patient_aggregate_key].decrement_total_fills()
             else:
                 # This branch should never be reached if the data file was validated. 
-                # However, it's here for added safety.
+                # However, it's here for added safety. Logging may be a good idea here.
                 pass
 
 
-def print_patient_drug_report(ran_from_menu):
+def sort_patient_dicts():
+    pass
+
+
+def print_patient_drug_report(ran_from_menu, sort_by=None):
     # Print report header if this function was called from the get_menu_option function
     if ran_from_menu:
         print("\nRX Report (by patient-drug)\n--------------------------")
-    for key, patient in patient_drug_dict.items():
+    # sort the dictionary
+    util = PatientDictsUtility
+    if sort_by == 'alphabetical':
+        processed_patient_drug_dict = util.sort_patient_drug_alphabitical(patient_drug_dict)
+    elif sort_by == 'decreasing_income':
+        processed_patient_drug_dict = util.sort_patient_drug_by_income_decreasing(patient_drug_dict)
+    else:
+        processed_patient_drug_dict = patient_drug_dict
+    print(processed_patient_drug_dict)
+    for key, patient in processed_patient_drug_dict.items():
         print(patient)
     print()
 
 
-def print_patient_aggregate_report(ran_from_menu):
+def print_patient_aggregate_report(ran_from_menu, sort_by=None):
     # Print report header if this function was called from the get_menu_option function
     if ran_from_menu:
         print("\nRX Report (aggregated)\n--------------------------")
-    for key, patient in patient_aggregated_dict.items():
+    # sort the dictionary
+    util = PatientDictsUtility
+    if sort_by == 'alphabetical':
+        processed_patient_aggregated_dict = util.sort_aggregate_patient_alphabitically(patient_aggregated_dict)
+    elif sort_by == 'decreasing_income':
+        processed_patient_aggregated_dict = util.sort_aggregate_patient_by_income_decreasing(patient_aggregated_dict)
+    else:    
+        processed_patient_aggregated_dict = patient_aggregated_dict
+    print(processed_patient_aggregated_dict)
+    for key, patient in processed_patient_aggregated_dict.items():
         print(patient)
     print()
 
