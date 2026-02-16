@@ -21,23 +21,26 @@ Coming ...
 As per the instructions, this is a fairly simple project. There are a number of ways to design the solution, as well as there are ways to test the solution. Additionally, the instructions made it clear to not have a single method process that processes the file and outputs the report. There are many ways to go overboard - adding superfluous features / functionality that were not asked for. 
 
 ## Architecture decisions
-Coming ...
+For the purposes of demonstrating knowledge of being able to break the program up into logical units for reusability and extensibility, and to show the proper selection and usage of datastructures - all without over-engineering - .
 
 ## Tradeoffs
 * I chose to validate the data file before processing it. This is because it is typically preferable for the system to validate the input file before it processes it. This strategy requires parsing and traversing the file twice (once to validate, and another time to process it). However, it is very often the case that this is well worth the processing cost because - while the processing in this case is fairly light - it is usually more difficult to undo processing (such as for when a database or microservices are involved) if there is something wrong with the data in the file. 
-* I have written a minimum set of unit tests. While near 100% test coverage is often the goal in software development, they are time consuming to write (unfortunately, too much time for an assignment). However, I have written unit tests for the most important part of the project to test - using the sample data as the text fixture.   
-
+* I have written a minimum set of unit tests. While near 100% test coverage is often the goal in software development, they are time consuming to write (unfortunately, too much time for an assignment). However, I have written 6 unit tests for the most important part of the project to test - using the sample data as the text fixture.   
 
 ## Data structures used 
-Coming ...
+This is a small program and so there are not many data structures that were used. The main datastructures utilized were:
+* Python dictionaries (these are like Ruby's Hashes), which serve to hold patient instances.
+* Custom classes to represent enumerations (for things such as prescription events, and the different possible sort types).
+* Custom classes to represent a patient. These are used to created instances of patients.
+* A custom class, comprised only of class based methods, to assiste with the sorting of the dictionaries.
 
 ## Code organization / Project structure
 The project is comprised of 4 Python files, and one input / text file. The 5 files are as follows:
-* main.py => 
-* patient.py => 
-* helpers.py => 
-* test_helpers.py => 
-* sample_data.txt => 
+* main.py => this is where the program's main entry point is. It is purposefully a light file which imports the other files / modules for the classes, enumerations, locic, etc. 
+* patient.py => this file contains the two primary classes to represent a patient for the program, as well as 2 enumerations and a utility class for working with the two primary classes. Note: though the two patient base classes are similar, inheritence was purposefully not used since the classes are fundamentally used for different purposes. 
+* helpers.py => this file contains virtually all of the program's logic resides.
+* test_helpers.py => this file contains 6 unit tests, which rely on the sample_data.txt file as the fixture.
+* sample_data.txt => this is the data input file for feeding the program prescription events. 
 
 ---
 
