@@ -9,7 +9,7 @@ patient_aggregated_dict = {} # this is the dictionary for the requested output
 income_per_prescription_filled = 5
 loss_per_return = 1
 total_loss_per_return = income_per_prescription_filled + loss_per_return
-sort_by = SortBy.NONE
+sort_by = SortBy.DECREASING_FILLS
 
 
 def execute_normal_flow(file_path_name, ran_from_menu, report_type):

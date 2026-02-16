@@ -34,7 +34,7 @@ def main():
     # If there are more than a single command line parameter, terminate the program  
     else:
         print(f"Error: Invalid number of command line parameters.")
-        print(f"Maximum of 1 expected, but {parameter_count} were supplied. \nTerminating program.")
+        print(f"Maximum of 1 expected (the data file name), but {parameter_count} were supplied. \nTerminating program.")
         sys.exit(0)
 # =======================================================================================
 

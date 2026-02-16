@@ -82,7 +82,7 @@ class PatientUtility:
         return dict(sorted(patient_dict.items(), key=lambda item: item[1].income_to_pharmacy, reverse=True))
     
     @classmethod
-    def sort_patient_drug_by_decreasing_income(cls, patient_dict):
+    def sort_patient_drug_by_decreasing_fills(cls, patient_dict):
         return dict(sorted(patient_dict.items(), key=lambda item: item[1].fills, reverse=True))
     
     @classmethod
