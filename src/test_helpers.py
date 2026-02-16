@@ -13,7 +13,6 @@ def setup_before_each_test():
     file_path = script_dir / "sample_data.txt"
     yield 
 
-
 def test_aggregate_report_output_for_mark(capsys):
     report_type = "aggregate"
     execute_normal_flow(file_path, ran_from_menu, report_type)

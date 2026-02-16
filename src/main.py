@@ -29,9 +29,8 @@ def main():
         get_menu_option(script_dir)
     # If there is only 1 parameter, it is expected to be the data filename.So run the expected default aggregate report.
     elif parameter_count == 1:
-        report_type = "aggregate"
         file_name = parameters[0]
-        execute_normal_flow(file_name, False, report_type)
+        execute_normal_flow(file_path_name=file_name, ran_from_menu=False, report_type="aggregate")
     # If there are more than a single command line parameter, terminate the program  
     else:
         print(f"Error: Invalid number of command line parameters.")

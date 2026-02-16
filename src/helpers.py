@@ -12,13 +12,13 @@ total_loss_per_return = income_per_prescription_filled + loss_per_return
 sort_by = SortBy.NONE
 
 
-def execute_normal_flow(file_path, ran_from_menu, report_type):
+def execute_normal_flow(file_path_name, ran_from_menu, report_type):
     # ran_from_menu is a boolean which controls whether the report header is printed 
     # as well as whether the program ends or loops back to the menu
-    file_exists = check_file_exists(file_path, ran_from_menu)
+    file_exists = check_file_exists(file_path_name, ran_from_menu)
     if file_exists:
-        validate_input_file(file_path)
-        process_validated_file(file_path)
+        validate_input_file(file_path_name)
+        process_validated_file(file_path_name)
         if report_type == "aggregate":
             print_patient_aggregate_report(ran_from_menu, sort_by)
         else:
