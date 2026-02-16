@@ -18,7 +18,13 @@ Coming ...
 * Despite the small sample data provided in the instructions, as input to the program for the assignment, I realize that the the input (in real life) can be arbitrarilly long.
 
 ## Thought process
-As per the instructions, this is a fairly simple project. There are a number of ways to design the solution, as well as there are ways to test the solution. Additionally, the instructions made it clear to not have a single method process that processes the file and outputs the report. There are many ways to go overboard - adding superfluous features / functionality that were not asked for. 
+As per the instructions, this is a fairly simple project. There are a number of ways to design the solution, as well as there are ways to test the solution. Additionally, the instructions made it clear to not have a single method process that processes the file and outputs the report. While there are many ways to go overboard - adding superfluous features / functionality that were not asked for - I have added a reasonable amount of features that serve to:
+* make the project easier to run (for instance, a menu has been added to allow the user to make certain selections) 
+* added sorting to the project since it is reasonable to assume this would be a useful feature
+* control the way the program sorts the data (i.e. the patient instances within the main dictionary structures)
+* added a 2nd type of report (i.e. per patient drug) which is a bit more granular than the requested aggregate report. The user can choose with type of report to run
+* added the ability for the used to specify a text file as input, for either of the two reports
+* since in a real life scenario the data can be arbitrarily long, I have implemented the ingestion of the file as a stream so that the host machine's memory is not exhausted (as may be the case if a file that was too large to read in all at once was supplied). 
 
 ## Architecture decisions
 For the purposes of demonstrating knowledge of being able to break the program up into logical units for reusability and extensibility, and to show the proper selection and usage of datastructures - all without over-engineering - .
@@ -50,6 +56,7 @@ The project is comprised of 4 Python files, and one input / text file. The 5 fil
 3. cd into the aki_gifthealth_assignment/src directory
 4. Run the project: uv run main.py sample_data.txt 
 5. To run the unit tests for the project: uv run pytest -v
+
 Note: ommiting the txt file will activate a memu for the user to select what they'd like to do - including running another input file (frovided the file exists in the same directory as the main.py file)
 
 
@@ -61,5 +68,6 @@ Note: ommiting the txt file will activate a memu for the user to select what the
 5. cd into the src directory
 6. Run the project: python main.py sample_data.txt 
 7. To run the unit tests for the project: python -m pytest -v
+
 Note: ommiting the txt file will activate a memu for the user to select what they'd like to do - including running another input file (frovided the file exists in the same directory as the main.py file)
 
