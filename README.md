@@ -4,21 +4,21 @@ Coming ...
 ---
 
 ## Tech stack
-* This is a Python based project.
-* The only dependency is pytest (for unit tests)
+* Python has been selected as the programming language to implement the solution for the coding assignment.
+* The only dependency, to be installed other than Python, is pytest (for unit tests).
 * uv was used for generating the project, and should be used for running the project (refer to the last section 'Running the code' for instructions on how to run the project and how to run the unit tests)
-* No databases were used since the output goes to the terminal
-
+* alertnatively, and more easily, a Python virtual environment can be set up (since pytest needs to be installed). When the virtual environment is created and activated the project can be started by typing: python main.py (from within the src directory)
+* No databases were used since the processing is all in memory and the output goes to directly to standard out (i.e. the terminal) 
 
 ---
 
 ## Assumptions 
 * A PatientName was given instead of a PatientID for illustrative purposes.  Typically a patient id would be used for this type of project.
-* The expected output is not ordered in any way. The sample output provided in the assingment instructions was not in alphabetical order, or ordered by income.
-* Despite the small file that was supplied in the instructions for the assignment, the input file (in real life) can be arbitrarilly long. 
+* The sample output provided in the assingment instructions seems to be ordered by the number of fills in decending order instead of the order in which 'create' prescription events occurred in the sample data. However, this could be by accident since in many programming languages hash structures do not guarantee the order of the items within them.
+* Despite the small sample data provided in the instructions, as input to the program for the assignment, I realize that the the input (in real life) can be arbitrarilly long.
 
 ## Thought process
-Coming ...
+As per the instructions, this is a fairly simple project. There are a number of ways to design the solution, as well as there are ways to test the solution. Additionally, the instructions made it clear to not have a single method process that processes the file and outputs the report. There are many ways to go overboard - adding superfluous features / functionality that were not asked for. 
 
 ## Architecture decisions
 Coming ...
@@ -32,9 +32,31 @@ Coming ...
 Coming ...
 
 ## Code organization / Project structure
-Coming ...
+The project is comprised of 4 Python files, and one input / text file. The 5 files are as follows:
+* main.py => 
+* patient.py => 
+* helpers.py => 
+* test_helpers.py => 
+* sample_data.txt => 
 
 ---
 
-## Running the code
-Coming ...
+## Running the code (using uv)
+1. Install uv on the host system
+2. Clone the project repositoty from Github: https://github.com/mindpeak-biz/aki_gifthealth_assignment
+3. cd into the aki_gifthealth_assignment/src directory
+4. Run the project: uv run main.py sample_data.txt 
+5. To run the unit tests for the project: uv run pytest -v
+Note: ommiting the txt file will activate a memu for the user to select what they'd like to do - including running another input file (frovided the file exists in the same directory as the main.py file)
+
+
+## Running the code (using a Python virtual environment and pip)
+1. Clone the project repositoty from Github: https://github.com/mindpeak-biz/aki_gifthealth_assignment
+2. cd into the aki_gifthealth_assignment directory
+3. Create a Python virtual environment within the project's root directory
+4. Run: pip install -r requirements.txt (this is so you can install PyTest to run the unit tests)
+5. cd into the src directory
+6. Run the project: python main.py sample_data.txt 
+7. To run the unit tests for the project: python -m pytest -v
+Note: ommiting the txt file will activate a memu for the user to select what they'd like to do - including running another input file (frovided the file exists in the same directory as the main.py file)
+
