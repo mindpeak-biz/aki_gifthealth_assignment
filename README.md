@@ -1,5 +1,5 @@
-## Project Description
-Coming ...
+## Description
+This is command line program written in Python. It ingests an input file as a stream, parses the rows as they are encountered to create instances of patients, stores them in 2 separate dictionaries, and then reders reports to the terminal (i.e. stdout).  
 
 ---
 
@@ -26,12 +26,16 @@ As per the instructions, this is a fairly simple project. There are a number of 
 * added the ability for the used to specify a text file as input, for either of the two reports
 * since in a real life scenario the data can be arbitrarily long, I have implemented the ingestion of the file as a stream so that the host machine's memory is not exhausted (as may be the case if a file that was too large to read in all at once was supplied). 
 
+Note: A more detailed description of the thought process, architectural decisions, trade-offs, and program organization can be given during the walk-through portion of the interview. 
+
 ## Architecture decisions
-For the purposes of demonstrating knowledge of being able to break the program up into logical units for reusability and extensibility, and to show the proper selection and usage of datastructures - all without over-engineering - .
+For the purposes of demonstrating knowledge of being able to break the program up into logical units for reusability and extensibility, and to show the proper selection and usage of datastructures - all without over-engineering - the program has been spread across multiple files, and just the right types and amount of data structures have been utilized. They are enumerated in the 'Data structures used' and 'Code organization / Project structure' sections below. 
 
 ## Tradeoffs
 * I chose to validate the data file before processing it. This is because it is typically preferable for the system to validate the input file before it processes it. This strategy requires parsing and traversing the file twice (once to validate, and another time to process it). However, it is very often the case that this is well worth the processing cost because - while the processing in this case is fairly light - it is usually more difficult to undo processing (such as for when a database or microservices are involved) if there is something wrong with the data in the file. 
-* I have written a minimum set of unit tests. While near 100% test coverage is often the goal in software development, they are time consuming to write (unfortunately, too much time for an assignment). However, I have written 6 unit tests for the most important part of the project to test - using the sample data as the text fixture.   
+* I have written a minimum set of unit tests. While near 100% test coverage is often the goal in software development, they are time consuming to write (unfortunately, too much time for an assignment). However, I have written 6 unit tests for the most important part of the project to test - using the sample data as the text fixture. 
+* While lists (i.e. arrays) could also have been used to hold the patient instances, I've elected to use dictionairies since they are typically preferred for searching (to modify any specific object's preoperties), and ordering (shen producing the reports).  
+* environment variables are typically used to provide a way to feed values into the program to provide for various capabilities - such as controlling how a program works. However, a good compromise for this project was to place the control variables in an easy to access location (the top portion of the helpers.py file) instead of using environment variables. Doing so also prevents the hard coding of values - such as comtrolling how the program sorts, and altering the monetary values for income per fullfilling a presription and the cost of returns. 
 
 ## Data structures used 
 This is a small program and so there are not many data structures that were used. The main datastructures utilized were:
@@ -71,3 +75,8 @@ Note: ommiting the txt file will activate a memu for the user to select what the
 
 Note: ommiting the txt file will activate a memu for the user to select what they'd like to do - including running another input file (frovided the file exists in the same directory as the main.py file)
 
+---
+
+Thank you,
+
+Aki Iskandar
